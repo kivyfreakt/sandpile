@@ -1,13 +1,13 @@
 
 # 03-07-2019 by musicfreakt
-# Functions and classes for sandpiles.
+# Functions and class for sandpiles.
 
 class Sandpile():
-    def __init__(self):
+    def __init__(self, width, height, max_s = 3):
         super(Sandpile, self).__init__()
-        self.width = 3
-        self.height = 3
-        self.max_sand = 4
+        self.width = width
+        self.height = height
+        self.max_sand = max_s + 1
         self.sandpile = [[0 for y in range(self.height)] for x in range(self.width)]
 
     def check_topple(self):
@@ -51,8 +51,8 @@ class Sandpile():
         self.sandpile[x][y] = number
 
 if __name__ == '__main__':
-    pile = Sandpile()
-    pile.set_sand(10, 1, 1)
+    pile = Sandpile(3,3)
+    pile.set_sand(20, 1, 1)
     print(pile.get_pile())
     pile.topple()
     print(pile.get_pile())
