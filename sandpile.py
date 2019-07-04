@@ -5,7 +5,7 @@
 import numpy as np
 
 class Sandpile():
-    def __init__(self, width, height, max_sand = 3):
+    def __init__(self, width = 3, height = 3, max_sand = 3):
         super(Sandpile, self).__init__()
         self.width = width
         self.height = height
@@ -19,7 +19,6 @@ class Sandpile():
         self.grid[:,1:][max_sand[:,:-1]] += 1
         self.grid[:,:-1][max_sand[:,1:]] += 1
 
-
     def run(self):
         while np.max(self.grid) >= self.max_grains:
             max_sand = self.grid >= self.max_grains
@@ -28,16 +27,16 @@ class Sandpile():
     def get_pile(self):
         return self.grid
 
-    def set_sand(self, number, x, y):
+    def set_sand(self, x, y, number):
         self.grid[x][y] = number
 
 
 if __name__ == '__main__':
-    pile = Sandpile(11,11)
-    pile.set_sand(4096, 5, 5)
+    pile = Sandpile(37,37)
+    pile.set_sand(18, 18, 65536)
     pile.run()
     grid = pile.get_pile()
-    for x in range(11):
-        for y in range(11):
+    for x in range(37):
+        for y in range(37):
             print(grid[x][y], end = ' ')
         print()
