@@ -13,15 +13,14 @@ class Sandpile():
         cols - width of sandpile
         max_sand - max count of sandpile grains (> 3)
         """
+        self.max_grains = max_sand
         if arr == None:
             self.rows = rows
             self.cols = cols
-            self.max_grains = max_sand
             self.grid = np.zeros((cols,rows), int)
         else:
             self.rows = len(arr)
             self.cols = len(arr[0])
-            self.max_grains = max_sand
             self.grid = np.array(arr)
 
     def topple(self, max_sand):
@@ -31,21 +30,22 @@ class Sandpile():
         self.grid[:,1:][max_sand[:,:-1]] += 1
         self.grid[:,:-1][max_sand[:,1:]] += 1
 
-    # def topple_S(self, max_sand):
-    #     b = max_sand//4
-    #     ost = max_sand - 4*b
-    #     # self.grid[max_sand] = ost
-    #     # self.grid[1:,:][max_sand[:-1,:]] += b
-    #     # self.grid[:-1,:][max_sand[1:,:]] += b
-    #     # self.grid[:,1:][max_sand[:,:-1]] += b
-    #     # self.grid[:,:-1][max_sand[:,1:]] += b
+    def topple_S(self, max_sand):
+        p = self.grid[max_sand]
+        b = p // self.max_grains
+        o = p % self.max_grains
+        self.grid[max_sand] = o
+        self.grid[1:,:][max_sand[:-1,:]] += b
+        self.grid[:-1,:][max_sand[1:,:]] += b
+        self.grid[:,1:][max_sand[:,:-1]] += b
+        self.grid[:,:-1][max_sand[:,1:]] += b
 
 
     def run(self):
         while np.max(self.grid) >= self.max_grains:
             max_sand = self.grid >= self.max_grains
-            # self.topple(max_sand)
             self.topple_S(max_sand)
+            # self.topple(max_sand)
 
     def get_pile(self):
         return self.grid
@@ -59,12 +59,16 @@ class Sandpile():
 
         filename - name of the file, where would be picture of sandpile
         """
-        plt.matshow(self.grid, cmap=plt.get_cmap('gist_rainbow'))
+        plt.matshow(self.grid, cmap=plt.get_cmap('gray'))
         plt.axis('off')
         plt.savefig(filename, bbox_inches='tight')
+        plt.show()
 
 if __name__ == '__main__':
-    pile = Sandpile(rows = 41, cols = 41)
-    pile.set_sand(20, 20, 2**10)
+    import time
+    start_time = time.time()
+    pile = Sandpile(rows = 301, cols = 301)
+    pile.set_sand(150, 150, 2**17)
     pile.run()
     pile.show()
+    print("--- %s seconds ---" % (time.time() - start_time))
