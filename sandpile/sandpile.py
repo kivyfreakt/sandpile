@@ -31,10 +31,21 @@ class Sandpile():
         self.grid[:,1:][max_sand[:,:-1]] += 1
         self.grid[:,:-1][max_sand[:,1:]] += 1
 
+    # def topple_S(self, max_sand):
+    #     b = max_sand//4
+    #     ost = max_sand - 4*b
+    #     # self.grid[max_sand] = ost
+    #     # self.grid[1:,:][max_sand[:-1,:]] += b
+    #     # self.grid[:-1,:][max_sand[1:,:]] += b
+    #     # self.grid[:,1:][max_sand[:,:-1]] += b
+    #     # self.grid[:,:-1][max_sand[:,1:]] += b
+
+
     def run(self):
         while np.max(self.grid) >= self.max_grains:
             max_sand = self.grid >= self.max_grains
-            self.topple(max_sand)
+            # self.topple(max_sand)
+            self.topple_S(max_sand)
 
     def get_pile(self):
         return self.grid
@@ -42,14 +53,18 @@ class Sandpile():
     def set_sand(self, x, y, number):
         self.grid[x][y] = number
 
-    def show(self):
+    def show(self, filename = "sandpile.png"):
+        """
+        plot sandpile and save it in the file
+
+        filename - name of the file, where would be picture of sandpile
+        """
         plt.matshow(self.grid, cmap=plt.get_cmap('gist_rainbow'))
         plt.axis('off')
-        filename = "sandpile.png"
         plt.savefig(filename, bbox_inches='tight')
 
 if __name__ == '__main__':
-    pile = Sandpile(rows = 101, cols = 101)
-    pile.set_sand(50, 50, 65536)
+    pile = Sandpile(rows = 41, cols = 41)
+    pile.set_sand(20, 20, 2**10)
     pile.run()
     pile.show()
