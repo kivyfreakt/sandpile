@@ -2,6 +2,7 @@
 # 03-07-2019 by musicfreakt
 # Functions and class for sandpiles.
 
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,9 +12,10 @@ class Sandpile():
         arr - 2d array of values
         rows - height of sandpile
         cols - width of sandpile
-        max_sand - max count of sandpile grains (> 3)
+        max_sand - max count of sandpile grains (must be div by 4)
         """
         self.max_grains = max_sand
+        self.iterations = 0
         if arr == None:
             self.rows = rows
             self.cols = cols
@@ -23,29 +25,27 @@ class Sandpile():
             self.cols = len(arr[0])
             self.grid = np.array(arr)
 
-    def topple(self, max_sand):
-        self.grid[max_sand] -= self.max_grains
-        self.grid[1:,:][max_sand[:-1,:]] += 1
-        self.grid[:-1,:][max_sand[1:,:]] += 1
-        self.grid[:,1:][max_sand[:,:-1]] += 1
-        self.grid[:,:-1][max_sand[:,1:]] += 1
 
-    def topple_S(self, max_sand):
-        p = self.grid[max_sand]
+    def topple(self, elem_x, elem_y):
+        p = self.grid[elem_x, elem_y]
         b = p // self.max_grains
         o = p % self.max_grains
-        self.grid[max_sand] = o
-        self.grid[1:,:][max_sand[:-1,:]] += b
-        self.grid[:-1,:][max_sand[1:,:]] += b
-        self.grid[:,1:][max_sand[:,:-1]] += b
-        self.grid[:,:-1][max_sand[:,1:]] += b
+        self.grid[elem_x, elem_y] = o
+
+        # increase height of neighbor piles
+        self.grid[elem_x-1, elem_y] += b
+        self.grid[elem_x+1, elem_y] += b
+        self.grid[elem_x, elem_y-1] += b
+        self.grid[elem_x, elem_y+1] += b
 
 
     def run(self):
+        start_time = time.time()
         while np.max(self.grid) >= self.max_grains:
-            max_sand = self.grid >= self.max_grains
-            self.topple_S(max_sand)
-            # self.topple(max_sand)
+            elem_x, elem_y = np.where(self.grid >= self.max_grains)
+            self.topple(elem_x, elem_y)
+            self.iterations += 1
+        print("--- %d iterations %s seconds ---" % (self.iterations, time.time() - start_time))
 
     def get_pile(self):
         return self.grid
@@ -59,16 +59,16 @@ class Sandpile():
 
         filename - name of the file, where would be picture of sandpile
         """
-        plt.matshow(self.grid, cmap=plt.get_cmap('gray'))
+
+        heatmap = plt.pcolor(self.grid)
         plt.axis('off')
+        plt.imshow(self.grid)
+        plt.colorbar(heatmap, ticks=range(self.max_grains))
         plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
 if __name__ == '__main__':
-    import time
-    start_time = time.time()
-    pile = Sandpile(rows = 301, cols = 301)
-    pile.set_sand(150, 150, 2**17)
+    pile = Sandpile(rows = 201, cols = 201)
+    pile.set_sand(100, 100, 30000)
     pile.run()
     pile.show()
-    print("--- %s seconds ---" % (time.time() - start_time))
