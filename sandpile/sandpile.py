@@ -3,6 +3,7 @@
 # Functions and class for sandpiles.
 
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 
 class Sandpile():
@@ -59,9 +60,9 @@ class Sandpile():
         return self.grid
 
     def set_sand(self, x, y, number):
-        self.grid[x][y] = number
+        self.grid[x,y] = number
 
-    def show(self, filename = "sandpile.png"):
+    def show(self, save = False, filename = "sandpile.png"):
         """
         plot sandpile and save it in the file
 
@@ -72,11 +73,25 @@ class Sandpile():
         plt.axis('off')
         plt.imshow(self.grid)
         plt.colorbar(heatmap, ticks=range(self.max_grains))
-        plt.savefig(filename, bbox_inches='tight')
+        if save:
+            plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
+    def save(self, filename = "sandpile.png"):
+        colours = [(41, 128, 185), (22, 160, 133), (142, 68, 173), (52, 73, 94)]
+        img = Image.fromarray(color_grid(self.grid, colours), "RGB")
+        img.save(filename)
+
+def color_grid(grid, colors):
+    new_grid = np.zeros((len(grid), len(grid[0]), 3), dtype=np.uint8)
+    for i in range(len(new_grid)):
+        for j in range(len(new_grid[0])):
+            new_grid[i, j] = colors[grid[i, j]]
+    return new_grid
+
 if __name__ == '__main__':
-    pile = Sandpile(rows = 201, cols = 201)
-    pile.set_sand(100, 100, 30000)
+    pile = Sandpile(rows = 401, cols = 401)
+    pile.set_sand(200, 200, 2**18)
     pile.run()
-    pile.show()
+    pile.show(save = True)
+    pile.save(filename = "sandpile2.png")
