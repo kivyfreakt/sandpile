@@ -14,6 +14,8 @@
 ---
 
 ## Sandpile model
+The Abelian sandpile model, also known as the Bak–Tang–Wiesenfeld model, was the first discovered example of a dynamical system displaying self-organized criticality.
+
 ### Definition
 
 
