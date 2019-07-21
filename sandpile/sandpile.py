@@ -2,7 +2,6 @@
 # 03-07-2019 by musicfreakt
 # Functions and class for sandpiles.
 
-import time
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,7 +14,6 @@ class Sandpile():
         max_sand - max count of sandpile grains (must be div by 4)
         """
         self.max_grains = max_sand
-        self.iterations = 0
         if arr == None:
             self.rows = rows
             self.cols = cols
@@ -43,12 +41,19 @@ class Sandpile():
 
 
     def run(self):
-        start_time = time.time()
+        from time import time
+
+        start_time = time()
+        iterations = 0
+        topple = self.topple
+        where = np.where
+
         while np.max(self.grid) >= self.max_grains:
-            elem_x, elem_y = np.where(self.grid >= self.max_grains)
-            self.topple(elem_x, elem_y)
-            self.iterations += 1
-        print("--- %d iterations %s seconds ---" % (self.iterations, time.time() - start_time))
+            elem_x, elem_y = where(self.grid >= self.max_grains)
+            topple(elem_x, elem_y)
+            iterations += 1
+
+        print("--- %d iterations %s seconds ---" % (iterations, time() - start_time))
 
     def get_pile(self):
         return self.grid
