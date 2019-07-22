@@ -72,8 +72,9 @@ class Sandpile():
 
     def show(self, save = False, filename = "sandpile.png"):
         """
-        plot sandpile and save it in the file
+        plot sandpile and/or save it in the file
 
+        save - true = save picture, false = dont save picture
         filename - name of the file, where would be picture of sandpile
         """
 
