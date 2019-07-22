@@ -3,7 +3,6 @@
 # Functions and class for sandpiles.
 
 import numpy as np
-from PIL import Image
 import matplotlib.pyplot as plt
 
 class Sandpile():
@@ -62,6 +61,15 @@ class Sandpile():
     def set_sand(self, x, y, number):
         self.grid[x,y] = number
 
+    def __add__(self, other):
+        result = Sandpile(rows = self.rows, cols = self.cols)
+        try:
+            result.grid = self.grid + other.grid
+            result.run()
+            return result
+        except ValueError:
+            print("ValueError: sandpile grid sizes must match")
+
     def show(self, save = False, filename = "sandpile.png"):
         """
         plot sandpile and save it in the file
@@ -78,8 +86,9 @@ class Sandpile():
         plt.show()
 
     def save(self, filename = "sandpile.png"):
-        colours = [(41, 128, 185), (22, 160, 133), (142, 68, 173), (52, 73, 94)]
-        img = Image.fromarray(color_grid(self.grid, colours), "RGB")
+        from PIL import Image
+        colors = [(255, 255, 0), (0, 185, 63), (0, 104, 255), (122, 0, 229)]
+        img = Image.fromarray(color_grid(self.grid, colors), "RGB")
         img.save(filename)
 
 def color_grid(grid, colors):
@@ -90,8 +99,8 @@ def color_grid(grid, colors):
     return new_grid
 
 if __name__ == '__main__':
-    pile = Sandpile(rows = 401, cols = 401)
-    pile.set_sand(200, 200, 2**18)
+    pile = Sandpile(rows = 801, cols = 801)
+    pile.set_sand(400, 400, 2**20)
     pile.run()
-    pile.show(save = True)
-    pile.save(filename = "sandpile2.png")
+    pile.show(save = True, filename = "2^20 grains(1).png")
+    pile.save(filename = "2^20 grains(2).png")
