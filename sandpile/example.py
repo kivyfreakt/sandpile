@@ -1,11 +1,6 @@
 from sandpile import Sandpile
 
-pile = Sandpile(rows = 201, cols = 201)
-
-pile.set_sand(100, 100, 2**16)
-
+pile = Sandpile(rows = 101, cols = 101)
+pile.set_sand(50, 50, 2**17)
 pile.run()
-
-pile.show(save = True, filename = "2^16 grains(1).png")
-
-pile.save(filename = "2^16 grains(2).png")
+pile.save(filename = "2^17 grains(2).png")

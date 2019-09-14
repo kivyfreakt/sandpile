@@ -33,11 +33,24 @@ class Sandpile():
         # increase height of neighbor piles
         try:
             self.grid[elem_x-1, elem_y] += b
+        except IndexError:
+            pass
+        try:
             self.grid[elem_x+1, elem_y] += b
+        except IndexError:
+            pass
+        try:
             self.grid[elem_x, elem_y-1] += b
+        except IndexError:
+            pass
+        try:
             self.grid[elem_x, elem_y+1] += b
         except IndexError:
-            print("IndexError: try to increase width or/and height of grid")
+            pass
+
+        # border 
+        self.grid[0] = self.grid[-1] = 0
+        self.grid[:, 0] = self.grid[:, -1] = 0
 
 
     def run(self):
@@ -65,8 +78,7 @@ class Sandpile():
         result = Sandpile(rows = self.rows, cols = self.cols)
         try:
             result.grid = self.grid + other.grid
-            result.run()
-            return result
+            return result.run()
         except ValueError:
             print("ValueError: sandpile grid sizes must match")
 
@@ -100,8 +112,8 @@ def color_grid(grid, colors):
     return new_grid
 
 if __name__ == '__main__':
-    pile = Sandpile(rows = 801, cols = 801)
-    pile.set_sand(400, 400, 2**20)
+    pile = Sandpile(rows = 601, cols = 601)
+    pile.set_sand(300, 300, 2**16)
     pile.run()
-    pile.show(save = True, filename = "2^20 grains(1).png")
-    pile.save(filename = "2^20 grains(2).png")
+    pile.show(save = True, filename = "2^16 grains(1).png")
+    pile.save(filename = "2^16 grains(2).png")
