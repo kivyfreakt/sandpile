@@ -31,24 +31,12 @@ class Sandpile():
         self.grid[elem_x, elem_y] = o
 
         # increase height of neighbor piles
-        try:
-            self.grid[elem_x-1, elem_y] += b
-        except IndexError:
-            pass
-        try:
-            self.grid[elem_x+1, elem_y] += b
-        except IndexError:
-            pass
-        try:
-            self.grid[elem_x, elem_y-1] += b
-        except IndexError:
-            pass
-        try:
-            self.grid[elem_x, elem_y+1] += b
-        except IndexError:
-            pass
+        self.grid[elem_x-1, elem_y] += b
+        self.grid[elem_x+1, elem_y] += b
+        self.grid[elem_x, elem_y-1] += b
+        self.grid[elem_x, elem_y+1] += b
 
-        # border 
+        # border
         self.grid[0] = self.grid[-1] = 0
         self.grid[:, 0] = self.grid[:, -1] = 0
 
